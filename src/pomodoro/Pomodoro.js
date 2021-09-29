@@ -60,21 +60,19 @@ function Pomodoro() {
     breakDuration: 5,
   };
 
-  const [timerState, setTimerState] = useState(initialState);
+  const [timerState, setTimerState] = useState({ ...initialState });
 
-  const increaseFocusDuration = currentState => {
-    const value = timerState.focusDuration;
+  const increaseFocusDuration = () => {
     setTimerState({
-      ...currentState,
-      focusDuration: Math.min(value + 1, 60),
+      ...timerState,
+      focusDuration: Math.min(timerState.focusDuration + 1, 60),
     });
   };
 
-  const decreaseFocusDuration = currentState => {
-    const value = timerState.focusDuration;
+  const decreaseFocusDuration = () => {
     setTimerState({
-      ...currentState,
-      focusDuration: Math.max(5, value - 1),
+      ...timerState,
+      focusDuration: Math.max(5, timerState.focusDuration - 1),
     });
   };
 
@@ -155,7 +153,7 @@ function Pomodoro() {
             <div className="input-group input-group-lg mb-2">
               <span className="input-group-text" data-testid="duration-break">
                 {/* TODO: Update this text to display the current break session duration */}
-                Break Duration: 05:00
+                Break Duration: {minutesToDuration(timerState.breakDuration)}
               </span>
               <div className="input-group-append">
                 {/* TODO: Implement decreasing break duration and disable during a focus or break session*/}
@@ -163,6 +161,7 @@ function Pomodoro() {
                   type="button"
                   className="btn btn-secondary"
                   data-testid="decrease-break"
+                  // onClick={decreaseBreakDuration}
                 >
                   <span className="oi oi-minus" />
                 </button>
@@ -171,6 +170,7 @@ function Pomodoro() {
                   type="button"
                   className="btn btn-secondary"
                   data-testid="increase-break"
+                  // onClick={increaseBreakDuration}
                 >
                   <span className="oi oi-plus" />
                 </button>
