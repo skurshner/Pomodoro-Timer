@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import classNames from "../utils/class-names";
 import useInterval from "../utils/useInterval";
+import { minutesToDuration } from "../utils/duration";
 
 // These functions are defined outside of the component to insure they do not have access to state
 // and are, therefore more likely to be pure.
@@ -54,8 +55,28 @@ function Pomodoro() {
   const [session, setSession] = useState(null);
 
   // ToDo: Allow the user to adjust the focus and break duration.
-  const focusDuration = 25;
-  const breakDuration = 5;
+  const initialState = {
+    focusDuration: 25,
+    breakDuration: 5,
+  };
+
+  const [timerState, setTimerState] = useState(initialState);
+
+  const increaseFocusDuration = currentState => {
+    const value = timerState.focusDuration;
+    setTimerState({
+      ...currentState,
+      focusDuration: Math.min(value + 1, 60),
+    });
+  };
+
+  const decreaseFocusDuration = currentState => {
+    const value = timerState.focusDuration;
+    setTimerState({
+      ...currentState,
+      focusDuration: Math.max(5, value - 1),
+    });
+  };
 
   /**
    * Custom hook that invokes the callback function every second
@@ -66,7 +87,9 @@ function Pomodoro() {
     () => {
       if (session.timeRemaining === 0) {
         new Audio("https://bigsoundbank.com/UPLOAD/mp3/1482.mp3").play();
-        return setSession(nextSession(focusDuration, breakDuration));
+        return setSession(
+          nextSession(timerState.focusDuration, timerState.breakDuration)
+        );
       }
       return setSession(nextTick);
     },
@@ -86,7 +109,7 @@ function Pomodoro() {
           if (prevStateSession === null) {
             return {
               label: "Focusing",
-              timeRemaining: focusDuration * 60,
+              timeRemaining: timerState.focusDuration * 60,
             };
           }
           return prevStateSession;
@@ -103,7 +126,7 @@ function Pomodoro() {
           <div className="input-group input-group-lg mb-2">
             <span className="input-group-text" data-testid="duration-focus">
               {/* TODO: Update this text to display the current focus session duration */}
-              Focus Duration: 25:00
+              Focus Duration: {minutesToDuration(timerState.focusDuration)}
             </span>
             <div className="input-group-append">
               {/* TODO: Implement decreasing focus duration and disable during a focus or break session */}
@@ -111,6 +134,7 @@ function Pomodoro() {
                 type="button"
                 className="btn btn-secondary"
                 data-testid="decrease-focus"
+                onClick={decreaseFocusDuration}
               >
                 <span className="oi oi-minus" />
               </button>
@@ -119,6 +143,7 @@ function Pomodoro() {
                 type="button"
                 className="btn btn-secondary"
                 data-testid="increase-focus"
+                onClick={increaseFocusDuration}
               >
                 <span className="oi oi-plus" />
               </button>
