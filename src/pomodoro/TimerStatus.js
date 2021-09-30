@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { secondsToDuration } from "../utils/duration";
+import { minutesToDuration } from "../utils/duration";
+import StatusBar from "./StatusBar";
 
-const TimerStatus = ({ session }) => {
+const TimerStatus = ({ timerState, session, isTimerRunning }) => {
+  const focusDur = minutesToDuration(timerState.focusDuration);
+  const breakDur = minutesToDuration(timerState.breakDuration);
+  const sessionType = session?.label;
+
+  const [percentage, setPercentage] = useState(0);
   if (!session) return <></>;
 
   return (
@@ -11,7 +18,8 @@ const TimerStatus = ({ session }) => {
         <div className="col">
           {/* TODO: Update message below to include current session (Focusing or On Break) total duration */}
           <h2 data-testid="session-title">
-            {session?.label} for 25:00 minutes
+            {sessionType} for {sessionType === "Focusing" ? focusDur : breakDur}{" "}
+            minutes
           </h2>
           {/* TODO: Update message below correctly format the time remaining in the current session */}
           <p className="lead" data-testid="session-sub-title">
@@ -21,18 +29,10 @@ const TimerStatus = ({ session }) => {
       </div>
       <div className="row mb-2">
         <div className="col">
-          <div className="progress" style={{ height: "20px" }}>
-            <div
-              className="progress-bar"
-              role="progressbar"
-              aria-valuemin="0"
-              aria-valuemax="100"
-              aria-valuenow="0" // TODO: Increase aria-valuenow as elapsed time increases
-              style={{ width: "0%" }} // TODO: Increase width % as elapsed time increases
-            />
-          </div>
+          <h2>{session && !isTimerRunning ? "PAUSED" : ""}</h2>
         </div>
       </div>
+      <StatusBar timerState={timerState} session={session} />
     </div>
   );
 };

@@ -60,27 +60,30 @@ function Pomodoro() {
     breakDuration: 5,
   };
 
-  const limits = {
+  const limitsAndInterval = {
     focusUpperLimit: 60,
     focusLowerLimit: 5,
+    focusInterval: 5,
     breakUpperLimit: 15,
     breakLowerLimit: 1,
+    breakInterval: 1,
   };
 
   const [timerState, setTimerState] = useState({ ...initialState });
 
-  const increaseDuration = (duration, upperLimit) =>
-    Math.min(duration + 1, upperLimit);
+  const increaseDuration = (duration, interval, upperLimit) =>
+    Math.min(duration + interval, upperLimit);
 
-  const decreaseDuration = (duration, lowerLimit) =>
-    Math.max(lowerLimit, duration - 1);
+  const decreaseDuration = (duration, interval, lowerLimit) =>
+    Math.max(lowerLimit, duration - interval);
 
   const increaseFocusDuration = () => {
     setTimerState({
       ...timerState,
       focusDuration: increaseDuration(
         timerState.focusDuration,
-        limits.focusUpperLimit
+        limitsAndInterval.focusInterval,
+        limitsAndInterval.focusUpperLimit
       ),
     });
   };
@@ -90,7 +93,8 @@ function Pomodoro() {
       ...timerState,
       focusDuration: decreaseDuration(
         timerState.focusDuration,
-        limits.focusLowerLimit
+        limitsAndInterval.focusInterval,
+        limitsAndInterval.focusLowerLimit
       ),
     });
   };
@@ -100,7 +104,8 @@ function Pomodoro() {
       ...timerState,
       breakDuration: increaseDuration(
         timerState.breakDuration,
-        limits.breakUpperLimit
+        limitsAndInterval.breakInterval,
+        limitsAndInterval.breakUpperLimit
       ),
     });
   };
@@ -110,7 +115,8 @@ function Pomodoro() {
       ...timerState,
       breakDuration: decreaseDuration(
         timerState.breakDuration,
-        limits.breakLowerLimit
+        limitsAndInterval.breakInterval,
+        limitsAndInterval.breakLowerLimit
       ),
     });
   };
@@ -166,15 +172,19 @@ function Pomodoro() {
       <TimerControls
         session={session}
         timerState={timerState}
+        isTimerRunning={isTimerRunning}
         decreaseFocusDuration={decreaseFocusDuration}
         increaseFocusDuration={increaseFocusDuration}
         decreaseBreakDuration={decreaseBreakDuration}
         increaseBreakDuration={increaseBreakDuration}
         playPause={playPause}
-        isTimerRunning={isTimerRunning}
         resetTimers={resetTimers}
       />
-      <TimerStatus session={session} />
+      <TimerStatus
+        timerState={timerState}
+        session={session}
+        isTimerRunning={isTimerRunning}
+      />
     </div>
   );
 }
