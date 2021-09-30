@@ -7,7 +7,7 @@ const StatusBar = ({ timerState, session }) => {
   const getPercentageLeft = () => {
     if (session.label === "Focusing") {
       return 100 * ((focDuration - session.timeRemaining) / focDuration);
-    } else if (session.lable === "On Break") {
+    } else if (session.label === "On Break") {
       return 100 * ((brkDuration - session.timeRemaining) / brkDuration);
     }
   };
@@ -23,7 +23,7 @@ const StatusBar = ({ timerState, session }) => {
             aria-valuemin="0"
             aria-valuemax="100"
             aria-valuenow={getPercentageLeft()} // TODO: Increase aria-valuenow as elapsed time increases
-            style={{ width: {} }} // TODO: Increase width % as elapsed time increases
+            style={{ width: getPercentageLeft() + "%" }} // TODO: Increase width % as elapsed time increases
           />
         </div>
       </div>
