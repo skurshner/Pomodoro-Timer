@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import classNames from "../utils/class-names";
 import useInterval from "../utils/useInterval";
+// import TimerControls from "./TimerControls";
+import classNames from "../utils/class-names";
 import { minutesToDuration } from "../utils/duration";
 
 // These functions are defined outside of the component to insure they do not have access to state
@@ -73,6 +74,20 @@ function Pomodoro() {
     setTimerState({
       ...timerState,
       focusDuration: Math.max(5, timerState.focusDuration - 1),
+    });
+  };
+
+  const increaseBreakDuration = () => {
+    setTimerState({
+      ...timerState,
+      breakDuration: Math.min(timerState.breakDuration + 1, 15),
+    });
+  };
+
+  const decreaseBreakDuration = () => {
+    setTimerState({
+      ...timerState,
+      breakDuration: Math.max(1, timerState.breakDuration - 1),
     });
   };
 
@@ -161,7 +176,7 @@ function Pomodoro() {
                   type="button"
                   className="btn btn-secondary"
                   data-testid="decrease-break"
-                  // onClick={decreaseBreakDuration}
+                  onClick={decreaseBreakDuration}
                 >
                   <span className="oi oi-minus" />
                 </button>
@@ -170,7 +185,7 @@ function Pomodoro() {
                   type="button"
                   className="btn btn-secondary"
                   data-testid="increase-break"
-                  // onClick={increaseBreakDuration}
+                  onClick={increaseBreakDuration}
                 >
                   <span className="oi oi-plus" />
                 </button>
@@ -214,6 +229,7 @@ function Pomodoro() {
           </div>
         </div>
       </div>
+
       <div>
         {/* TODO: This area should show only when there is an active focus or break - i.e. the session is running or is paused */}
         <div className="row mb-2">
