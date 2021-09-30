@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { secondsToDuration } from "../utils/duration";
 import { minutesToDuration } from "../utils/duration";
 import StatusBar from "./StatusBar";
@@ -8,7 +8,6 @@ const TimerStatus = ({ timerState, session, isTimerRunning }) => {
   const breakDur = minutesToDuration(timerState.breakDuration);
   const sessionType = session?.label;
 
-  const [percentage, setPercentage] = useState(0);
   if (!session) return <></>;
 
   return (
