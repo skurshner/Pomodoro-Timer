@@ -3,6 +3,7 @@ import useInterval from "../utils/useInterval";
 // import TimerControls from "./TimerControls";
 import classNames from "../utils/class-names";
 import { minutesToDuration } from "../utils/duration";
+import TimerStatus from "./TimerStatus";
 
 // These functions are defined outside of the component to insure they do not have access to state
 // and are, therefore more likely to be pure.
@@ -61,36 +62,66 @@ function Pomodoro() {
     breakDuration: 5,
   };
 
+  const limits = {
+    focusUpperLimit: 60,
+    focusLowerLimit: 5,
+    breakUpperLimit: 15,
+    breakLowerLimit: 1,
+  };
+
   const [timerState, setTimerState] = useState({ ...initialState });
+
+  const increaseDuration = (duration, upperLimit) =>
+    Math.min(duration + 1, upperLimit);
+
+  const decreaseDuration = (duration, lowerLimit) =>
+    Math.max(lowerLimit, duration - 1);
 
   const increaseFocusDuration = () => {
     setTimerState({
       ...timerState,
-      focusDuration: Math.min(timerState.focusDuration + 1, 60),
+      focusDuration: increaseDuration(
+        timerState.focusDuration,
+        limits.focusUpperLimit
+      ),
     });
   };
 
   const decreaseFocusDuration = () => {
     setTimerState({
       ...timerState,
-      focusDuration: Math.max(5, timerState.focusDuration - 1),
+      focusDuration: decreaseDuration(
+        timerState.focusDuration,
+        limits.focusLowerLimit
+      ),
     });
   };
 
   const increaseBreakDuration = () => {
     setTimerState({
       ...timerState,
-      breakDuration: Math.min(timerState.breakDuration + 1, 15),
+      breakDuration: increaseDuration(
+        timerState.breakDuration,
+        limits.breakUpperLimit
+      ),
     });
   };
 
   const decreaseBreakDuration = () => {
     setTimerState({
       ...timerState,
-      breakDuration: Math.max(1, timerState.breakDuration - 1),
+      breakDuration: decreaseDuration(
+        timerState.breakDuration,
+        limits.breakLowerLimit
+      ),
     });
   };
 
+  const resetTimers = () => {
+    setIsTimerRunning(false);
+    setSession(null);
+    setTimerState({ ...initialState });
+  };
   /**
    * Custom hook that invokes the callback function every second
    *
@@ -223,6 +254,7 @@ function Pomodoro() {
               className="btn btn-secondary"
               data-testid="stop"
               title="Stop the session"
+              onClick={resetTimers}
             >
               <span className="oi oi-media-stop" />
             </button>
@@ -230,35 +262,7 @@ function Pomodoro() {
         </div>
       </div>
 
-      <div>
-        {/* TODO: This area should show only when there is an active focus or break - i.e. the session is running or is paused */}
-        <div className="row mb-2">
-          <div className="col">
-            {/* TODO: Update message below to include current session (Focusing or On Break) total duration */}
-            <h2 data-testid="session-title">
-              {session?.label} for 25:00 minutes
-            </h2>
-            {/* TODO: Update message below correctly format the time remaining in the current session */}
-            <p className="lead" data-testid="session-sub-title">
-              {session?.timeRemaining} remaining
-            </p>
-          </div>
-        </div>
-        <div className="row mb-2">
-          <div className="col">
-            <div className="progress" style={{ height: "20px" }}>
-              <div
-                className="progress-bar"
-                role="progressbar"
-                aria-valuemin="0"
-                aria-valuemax="100"
-                aria-valuenow="0" // TODO: Increase aria-valuenow as elapsed time increases
-                style={{ width: "0%" }} // TODO: Increase width % as elapsed time increases
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <TimerStatus session={session} />
     </div>
   );
 }
