@@ -1,5 +1,6 @@
 import React from "react";
 import { minutesToDuration } from "../utils/duration";
+import PropTypes from "prop-types";
 
 const TimerSetting = ({
   label,
@@ -8,31 +9,32 @@ const TimerSetting = ({
   setIncreaseDuration,
   setDecreaseDuration,
 }) => {
-  const getTimer = label => {
-    if (label === "Focus") {
-      return timerState.focusDuration;
-    }
-    return timerState.breakDuration;
-  };
-
-  const setTimerBtnDisable = () => (session ? true : "");
-
+  // Object containing the correct id's based on which timer the component changes
   const testIds = {
     durationType: `duration-${label.toLowerCase()}`,
     decreaseDuration: `decrease-${label.toLowerCase()}`,
     increaseDuration: `increase-${label.toLowerCase()}`,
   };
 
+  // Returns the timer display based on label param
+  const getTimer = label => {
+    if (label === "Focus") {
+      return minutesToDuration(timerState.focusDuration);
+    }
+    return minutesToDuration(timerState.breakDuration);
+  };
+
+  // Returns true if there is an active session
+  const getSessionStatus = () => (session ? true : "");
+
   return (
     <div className="input-group input-group-lg mb-2">
       <span className="input-group-text" data-testid={testIds.durationType}>
-        {/* TODO: Update this text to display the current focus session duration */}
-        {label} Duration: {minutesToDuration(getTimer(label))}
+        {label} Duration: {getTimer(label)}
       </span>
       <div className="input-group-append">
-        {/* TODO: Implement decreasing focus duration and disable during a focus or break session */}
         <button
-          disabled={setTimerBtnDisable()}
+          disabled={getSessionStatus()}
           type="button"
           className="btn btn-secondary"
           data-testid={testIds.decreaseDuration}
@@ -40,9 +42,8 @@ const TimerSetting = ({
         >
           <span className="oi oi-minus" />
         </button>
-        {/* TODO: Implement increasing focus duration  and disable during a focus or break session */}
         <button
-          disabled={setTimerBtnDisable()}
+          disabled={getSessionStatus()}
           type="button"
           className="btn btn-secondary"
           data-testid={testIds.increaseDuration}
@@ -53,6 +54,14 @@ const TimerSetting = ({
       </div>
     </div>
   );
+};
+
+TimerSetting.propTypes = {
+  label: PropTypes.string,
+  session: PropTypes.object,
+  timerState: PropTypes.object,
+  setIncreaseDuration: PropTypes.func,
+  setDecreaseDuration: PropTypes.func,
 };
 
 export default TimerSetting;

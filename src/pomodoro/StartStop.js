@@ -1,8 +1,10 @@
 import React from "react";
 import classNames from "../utils/class-names";
+import PropTypes from "prop-types";
 
 const StartStop = ({ isTimerRunning, session, playPause, resetTimers }) => {
-  const setStopBtnDisable = () => (session ? "" : true);
+  // Return falsy if there is no active session
+  const getSessionStatus = () => (session ? "" : true);
 
   return (
     <div className="row">
@@ -27,10 +29,8 @@ const StartStop = ({ isTimerRunning, session, playPause, resetTimers }) => {
               })}
             />
           </button>
-          {/* TODO: Implement stopping the current focus or break session. and disable the stop button when there is no active session */}
-          {/* TODO: Disable the stop button when there is no active session */}
           <button
-            disabled={setStopBtnDisable()}
+            disabled={getSessionStatus()}
             type="button"
             className="btn btn-secondary"
             data-testid="stop"
@@ -43,6 +43,13 @@ const StartStop = ({ isTimerRunning, session, playPause, resetTimers }) => {
       </div>
     </div>
   );
+};
+
+StartStop.propTypes = {
+  isTimerRunning: PropTypes.bool,
+  session: PropTypes.object,
+  playPause: PropTypes.func,
+  resetTimers: PropTypes.func,
 };
 
 export default StartStop;

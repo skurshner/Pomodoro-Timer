@@ -1,14 +1,15 @@
 import React from "react";
+import PropTypes from "prop-types";
 import StartStop from "./StartStop";
 import TimerSetting from "./TimerSetting";
 
 const TimerControls = ({
   session,
   timerState,
-  decreaseFocusDuration,
   increaseFocusDuration,
-  decreaseBreakDuration,
+  decreaseFocusDuration,
   increaseBreakDuration,
+  decreaseBreakDuration,
   playPause,
   isTimerRunning,
   resetTimers,
@@ -45,6 +46,18 @@ const TimerControls = ({
       />
     </>
   );
+};
+
+TimerControls.propTypes = {
+  session: PropTypes.object,
+  timerState: PropTypes.object,
+  increaseFocusDuration: PropTypes.func,
+  decreaseFocusDuration: PropTypes.func,
+  increaseBreakDuration: PropTypes.func,
+  decreaseBreakDuration: PropTypes.func,
+  playPause: PropTypes.func,
+  isTimerRunning: PropTypes.bool,
+  resetTimers: PropTypes.func,
 };
 
 export default TimerControls;

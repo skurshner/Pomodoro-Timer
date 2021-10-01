@@ -1,9 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const StatusBar = ({ timerState, session }) => {
+  // Convert focus and break duration to seconds
   const focDuration = timerState.focusDuration * 60;
   const brkDuration = timerState.breakDuration * 60;
 
+  // Return the time % remaining in a given session
   const getPercentageLeft = () => {
     if (session.label === "Focusing") {
       return 100 * ((focDuration - session.timeRemaining) / focDuration);
@@ -21,13 +24,18 @@ const StatusBar = ({ timerState, session }) => {
             role="progressbar"
             aria-valuemin="0"
             aria-valuemax="100"
-            aria-valuenow={getPercentageLeft()} // TODO: Increase aria-valuenow as elapsed time increases
-            style={{ width: getPercentageLeft() + "%" }} // TODO: Increase width % as elapsed time increases
+            aria-valuenow={getPercentageLeft()}
+            style={{ width: getPercentageLeft() + "%" }}
           />
         </div>
       </div>
     </div>
   );
+};
+
+StatusBar.propTypes = {
+  session: PropTypes.object,
+  timerState: PropTypes.object,
 };
 
 export default StatusBar;
