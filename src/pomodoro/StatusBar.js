@@ -15,7 +15,6 @@ const StatusBar = ({ timerState, session }) => {
   return (
     <div className="row mb-2">
       <div className="col">
-        <p>{getPercentageLeft()}</p>
         <div className="progress" style={{ height: "20px" }}>
           <div
             className="progress-bar"
