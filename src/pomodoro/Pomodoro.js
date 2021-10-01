@@ -61,7 +61,7 @@ function Pomodoro() {
   };
 
   // Store timer upper and lower limits as well as adjustment intervals
-  const limitsAndInterval = {
+  const limitsAndIntervals = {
     focusUpperLimit: 60,
     focusLowerLimit: 5,
     focusInterval: 5,
@@ -73,99 +73,55 @@ function Pomodoro() {
   const [timerState, setTimerState] = useState({ ...initialState });
 
   // Increase the timer's duration by the timer's interval, limited to its upper limit
-  const increaseDuration = (duration, interval, upperLimit) =>
+  const increaseTime = (duration, interval, upperLimit) =>
     Math.min(duration + interval, upperLimit);
 
   // Decrease the timer's duration by the timer's interval, limited to its lower limit
-  const decreaseDuration = (duration, interval, lowerLimit) =>
+  const decreaseTime = (duration, interval, lowerLimit) =>
     Math.max(lowerLimit, duration - interval);
 
-  // const updateFocusDuration = direction => {
-  //   if (direction === "+") {
-  //     setTimerState({
-  //       ...timerState,
-  //       focusDuration: increaseDuration(
-  //         timerState.focusDuration,
-  //         limitsAndInterval.focusInterval,
-  //         limitsAndInterval.focusUpperLimit
-  //       ),
-  //     });
-  //   } else if (direction === "-") {
-  //     setTimerState({
-  //       ...timerState,
-  //       focusDuration: decreaseDuration(
-  //         timerState.focusDuration,
-  //         limitsAndInterval.focusInterval,
-  //         limitsAndInterval.focusLowerLimit
-  //       ),
-  //     });
-  //   }
-  // };
-
-  // const updateBreakDuration = direction => {
-  //   if (direction === "+") {
-  //     setTimerState({
-  //       ...timerState,
-  //       breakDuration: increaseDuration(
-  //         timerState.breakDuration,
-  //         limitsAndInterval.breakInterval,
-  //         limitsAndInterval.breakUpperLimit
-  //       ),
-  //     });
-  //   } else if (direction === "-") {
-  //     setTimerState({
-  //       ...timerState,
-  //       breakDuration: decreaseDuration(
-  //         timerState.breakDuration,
-  //         limitsAndInterval.breakInterval,
-  //         limitsAndInterval.breakLowerLimit
-  //       ),
-  //     });
-  //   }
-  // };
-
-  const increaseFocusDuration = () => {
-    setTimerState({
-      ...timerState,
-      focusDuration: increaseDuration(
-        timerState.focusDuration,
-        limitsAndInterval.focusInterval,
-        limitsAndInterval.focusUpperLimit
-      ),
-    });
+  const increaseTimerDuration = label => {
+    if (label === "focus") {
+      setTimerState({
+        ...timerState,
+        focusDuration: increaseTime(
+          timerState.focusDuration,
+          limitsAndIntervals.focusInterval,
+          limitsAndIntervals.focusUpperLimit
+        ),
+      });
+    } else if (label === "break") {
+      setTimerState({
+        ...timerState,
+        breakDuration: increaseTime(
+          timerState.breakDuration,
+          limitsAndIntervals.breakInterval,
+          limitsAndIntervals.breakUpperLimit
+        ),
+      });
+    }
   };
 
-  const decreaseFocusDuration = () => {
-    setTimerState({
-      ...timerState,
-      focusDuration: decreaseDuration(
-        timerState.focusDuration,
-        limitsAndInterval.focusInterval,
-        limitsAndInterval.focusLowerLimit
-      ),
-    });
-  };
-
-  const increaseBreakDuration = () => {
-    setTimerState({
-      ...timerState,
-      breakDuration: increaseDuration(
-        timerState.breakDuration,
-        limitsAndInterval.breakInterval,
-        limitsAndInterval.breakUpperLimit
-      ),
-    });
-  };
-
-  const decreaseBreakDuration = () => {
-    setTimerState({
-      ...timerState,
-      breakDuration: decreaseDuration(
-        timerState.breakDuration,
-        limitsAndInterval.breakInterval,
-        limitsAndInterval.breakLowerLimit
-      ),
-    });
+  const decreaseTimerDuration = label => {
+    if (label === "focus") {
+      setTimerState({
+        ...timerState,
+        focusDuration: decreaseTime(
+          timerState.focusDuration,
+          limitsAndIntervals.focusInterval,
+          limitsAndIntervals.focusLowerLimit
+        ),
+      });
+    } else if (label === "break") {
+      setTimerState({
+        ...timerState,
+        breakDuration: decreaseTime(
+          timerState.breakDuration,
+          limitsAndIntervals.breakInterval,
+          limitsAndIntervals.breakLowerLimit
+        ),
+      });
+    }
   };
 
   // Resets the states to default values
@@ -221,12 +177,8 @@ function Pomodoro() {
         session={session}
         timerState={timerState}
         isTimerRunning={isTimerRunning}
-        increaseFocusDuration={increaseFocusDuration}
-        decreaseFocusDuration={decreaseFocusDuration}
-        increaseBreakDuration={increaseBreakDuration}
-        decreaseBreakDuration={decreaseBreakDuration}
-        // updateFocusDuration={updateFocusDuration}
-        // updateBreakDuration={updateBreakDuration}
+        increaseTimerDuration={increaseTimerDuration}
+        decreaseTimerDuration={decreaseTimerDuration}
         playPause={playPause}
         resetTimers={resetTimers}
       />
