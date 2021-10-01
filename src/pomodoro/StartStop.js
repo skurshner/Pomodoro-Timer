@@ -2,6 +2,8 @@ import React from "react";
 import classNames from "../utils/class-names";
 
 const StartStop = ({ isTimerRunning, session, playPause, resetTimers }) => {
+  const setStopBtnDisable = () => (session ? "" : true);
+
   return (
     <div className="row">
       <div className="col">
@@ -28,7 +30,7 @@ const StartStop = ({ isTimerRunning, session, playPause, resetTimers }) => {
           {/* TODO: Implement stopping the current focus or break session. and disable the stop button when there is no active session */}
           {/* TODO: Disable the stop button when there is no active session */}
           <button
-            disabled={session ? "" : true}
+            disabled={setStopBtnDisable()}
             type="button"
             className="btn btn-secondary"
             data-testid="stop"

@@ -7,6 +7,12 @@ const TimerStatus = ({ timerState, session, isTimerRunning }) => {
   const focusDur = minutesToDuration(timerState.focusDuration);
   const breakDur = minutesToDuration(timerState.breakDuration);
   const sessionType = session?.label;
+  const sessionTimeRemaining = secondsToDuration(session?.timeRemaining);
+
+  const getSessionDuration = () =>
+    sessionType === "Focusing" ? focusDur : breakDur;
+
+  const getIsPaused = () => (session && !isTimerRunning ? "PAUSED" : "");
 
   if (!session) return <></>;
 
@@ -17,18 +23,17 @@ const TimerStatus = ({ timerState, session, isTimerRunning }) => {
         <div className="col">
           {/* TODO: Update message below to include current session (Focusing or On Break) total duration */}
           <h2 data-testid="session-title">
-            {sessionType} for {sessionType === "Focusing" ? focusDur : breakDur}{" "}
-            minutes
+            {sessionType} for {getSessionDuration()} minutes
           </h2>
           {/* TODO: Update message below correctly format the time remaining in the current session */}
           <p className="lead" data-testid="session-sub-title">
-            {secondsToDuration(session?.timeRemaining)} remaining
+            {sessionTimeRemaining} remaining
           </p>
         </div>
       </div>
       <div className="row mb-2">
         <div className="col">
-          <h2>{session && !isTimerRunning ? "PAUSED" : ""}</h2>
+          <h2>{getIsPaused()}</h2>
         </div>
       </div>
       <StatusBar timerState={timerState} session={session} />

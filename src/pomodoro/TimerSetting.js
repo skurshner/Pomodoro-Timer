@@ -15,11 +15,14 @@ const TimerSetting = ({
     return timerState.breakDuration;
   };
 
+  const setTimerBtnDisable = () => (session ? true : "");
+
   const testIds = {
     durationType: `duration-${label.toLowerCase()}`,
     decreaseDuration: `decrease-${label.toLowerCase()}`,
     increaseDuration: `increase-${label.toLowerCase()}`,
   };
+
   return (
     <div className="input-group input-group-lg mb-2">
       <span className="input-group-text" data-testid={testIds.durationType}>
@@ -29,7 +32,7 @@ const TimerSetting = ({
       <div className="input-group-append">
         {/* TODO: Implement decreasing focus duration and disable during a focus or break session */}
         <button
-          disabled={session ? true : ""}
+          disabled={setTimerBtnDisable()}
           type="button"
           className="btn btn-secondary"
           data-testid={testIds.decreaseDuration}
@@ -39,7 +42,7 @@ const TimerSetting = ({
         </button>
         {/* TODO: Implement increasing focus duration  and disable during a focus or break session */}
         <button
-          disabled={session ? true : ""}
+          disabled={setTimerBtnDisable()}
           type="button"
           className="btn btn-secondary"
           data-testid={testIds.increaseDuration}
