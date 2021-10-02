@@ -6,8 +6,7 @@ import TimerSetting from "./TimerSetting";
 const TimerControls = ({
   session,
   timerState,
-  increaseTimerDuration,
-  decreaseTimerDuration,
+  changeTimerDuration,
   playPause,
   isTimerRunning,
   resetTimers,
@@ -20,8 +19,8 @@ const TimerControls = ({
             label={"Focus"}
             session={session}
             timerState={timerState}
-            increaseTimerDuration={() => increaseTimerDuration("focus")}
-            decreaseTimerDuration={() => decreaseTimerDuration("focus")}
+            increaseTimerDuration={() => changeTimerDuration("focus", "+")}
+            decreaseTimerDuration={() => changeTimerDuration("focus", "-")}
           />
         </div>
         <div className="col">
@@ -30,8 +29,8 @@ const TimerControls = ({
               label={"Break"}
               session={session}
               timerState={timerState}
-              increaseTimerDuration={() => increaseTimerDuration("break")}
-              decreaseTimerDuration={() => decreaseTimerDuration("break")}
+              increaseTimerDuration={() => changeTimerDuration("break", "+")}
+              decreaseTimerDuration={() => changeTimerDuration("break", "-")}
             />
           </div>
         </div>

@@ -49,11 +49,6 @@ function nextSession(focusDuration, breakDuration) {
 }
 
 function Pomodoro() {
-  // Timer starts out paused
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-  // The current session - null where there is no session running
-  const [session, setSession] = useState(null);
-
   // Set initial values for both timers
   const initialState = {
     focusDuration: 25,
@@ -62,14 +57,15 @@ function Pomodoro() {
 
   // Store timer upper and lower limits as well as adjustment intervals
   const limitsAndIntervals = {
-    focusUpperLimit: 60,
-    focusLowerLimit: 5,
-    focusInterval: 5,
-    breakUpperLimit: 15,
-    breakLowerLimit: 1,
-    breakInterval: 1,
+    focus: { upperLimit: 60, lowerLimit: 5, interval: 5 },
+    break: { upperLimit: 15, lowerLimit: 1, interval: 1 },
   };
 
+  // Timer starts out paused
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  // The current session - null where there is no session running
+  const [session, setSession] = useState(null);
+  // Sets default timer durations
   const [timerState, setTimerState] = useState({ ...initialState });
 
   // Increase the timer's duration by the timer's interval, limited to its upper limit
@@ -80,46 +76,34 @@ function Pomodoro() {
   const decreaseTime = (duration, interval, lowerLimit) =>
     Math.max(lowerLimit, duration - interval);
 
-  const increaseTimerDuration = label => {
-    if (label === "focus") {
-      setTimerState({
-        ...timerState,
-        focusDuration: increaseTime(
-          timerState.focusDuration,
-          limitsAndIntervals.focusInterval,
-          limitsAndIntervals.focusUpperLimit
-        ),
-      });
-    } else if (label === "break") {
-      setTimerState({
-        ...timerState,
-        breakDuration: increaseTime(
-          timerState.breakDuration,
-          limitsAndIntervals.breakInterval,
-          limitsAndIntervals.breakUpperLimit
-        ),
-      });
-    }
-  };
+  const changeTimerDuration = (label, direction) => {
+    const timerLabel = `${label}Duration`;
+    const timerDuration = timerState[timerLabel];
+    const timerInterval = limitsAndIntervals[label].interval;
+    const timerUpperLimit = limitsAndIntervals[label].upperLimit;
+    const timerLowerLimit = limitsAndIntervals[label].lowerLimit;
 
-  const decreaseTimerDuration = label => {
-    if (label === "focus") {
-      setTimerState({
-        ...timerState,
-        focusDuration: decreaseTime(
-          timerState.focusDuration,
-          limitsAndIntervals.focusInterval,
-          limitsAndIntervals.focusLowerLimit
-        ),
+    if (direction === "+") {
+      setTimerState(timerState => {
+        return {
+          ...timerState,
+          [timerLabel]: increaseTime(
+            timerDuration,
+            timerInterval,
+            timerUpperLimit
+          ),
+        };
       });
-    } else if (label === "break") {
-      setTimerState({
-        ...timerState,
-        breakDuration: decreaseTime(
-          timerState.breakDuration,
-          limitsAndIntervals.breakInterval,
-          limitsAndIntervals.breakLowerLimit
-        ),
+    } else if (direction === "-") {
+      setTimerState(timerState => {
+        return {
+          ...timerState,
+          [timerLabel]: decreaseTime(
+            timerDuration,
+            timerInterval,
+            timerLowerLimit
+          ),
+        };
       });
     }
   };
@@ -177,8 +161,7 @@ function Pomodoro() {
         session={session}
         timerState={timerState}
         isTimerRunning={isTimerRunning}
-        increaseTimerDuration={increaseTimerDuration}
-        decreaseTimerDuration={decreaseTimerDuration}
+        changeTimerDuration={changeTimerDuration}
         playPause={playPause}
         resetTimers={resetTimers}
       />
