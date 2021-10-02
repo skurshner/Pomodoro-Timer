@@ -19,8 +19,12 @@ const TimerControls = ({
             label={"Focus"}
             session={session}
             timerState={timerState}
-            increaseTimerDuration={() => changeTimerDuration("focus", "+")}
-            decreaseTimerDuration={() => changeTimerDuration("focus", "-")}
+            increaseDurationClickHandler={() =>
+              changeTimerDuration("focus", "+")
+            }
+            decreaseDurationClickHandler={() =>
+              changeTimerDuration("focus", "-")
+            }
           />
         </div>
         <div className="col">
@@ -29,8 +33,12 @@ const TimerControls = ({
               label={"Break"}
               session={session}
               timerState={timerState}
-              increaseTimerDuration={() => changeTimerDuration("break", "+")}
-              decreaseTimerDuration={() => changeTimerDuration("break", "-")}
+              increaseDurationClickHandler={() =>
+                changeTimerDuration("break", "+")
+              }
+              decreaseDurationClickHandler={() =>
+                changeTimerDuration("break", "-")
+              }
             />
           </div>
         </div>
@@ -48,10 +56,7 @@ const TimerControls = ({
 TimerControls.propTypes = {
   session: PropTypes.object,
   timerState: PropTypes.object,
-  increaseFocusDuration: PropTypes.func,
-  decreaseFocusDuration: PropTypes.func,
-  increaseBreakDuration: PropTypes.func,
-  decreaseBreakDuration: PropTypes.func,
+  changeTimerDuration: PropTypes.func,
   playPause: PropTypes.func,
   isTimerRunning: PropTypes.bool,
   resetTimers: PropTypes.func,

@@ -6,8 +6,8 @@ const TimerSetting = ({
   label,
   session,
   timerState,
-  increaseTimerDuration,
-  decreaseTimerDuration,
+  increaseDurationClickHandler,
+  decreaseDurationClickHandler,
 }) => {
   // Object containing the correct id's based on which timer the component changes
   const testIds = {
@@ -38,7 +38,7 @@ const TimerSetting = ({
           type="button"
           className="btn btn-secondary"
           data-testid={testIds.decreaseDuration}
-          onClick={decreaseTimerDuration}
+          onClick={decreaseDurationClickHandler}
         >
           <span className="oi oi-minus" />
         </button>
@@ -47,7 +47,7 @@ const TimerSetting = ({
           type="button"
           className="btn btn-secondary"
           data-testid={testIds.increaseDuration}
-          onClick={increaseTimerDuration}
+          onClick={increaseDurationClickHandler}
         >
           <span className="oi oi-plus" />
         </button>
@@ -60,8 +60,8 @@ TimerSetting.propTypes = {
   label: PropTypes.string,
   session: PropTypes.object,
   timerState: PropTypes.object,
-  setIncreaseDuration: PropTypes.func,
-  setDecreaseDuration: PropTypes.func,
+  increaseDurationClickHandler: PropTypes.func,
+  decreaseDurationClickHandler: PropTypes.func,
 };
 
 export default TimerSetting;

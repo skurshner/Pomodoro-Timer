@@ -76,6 +76,7 @@ function Pomodoro() {
   const decreaseTime = (duration, interval, lowerLimit) =>
     Math.max(lowerLimit, duration - interval);
 
+  // Increase or decrease the duration of either timer
   const changeTimerDuration = (label, direction) => {
     const timerLabel = `${label}Duration`;
     const timerDuration = timerState[timerLabel];
